@@ -1,9 +1,16 @@
 package com.example.websocket.entity;
 
-public class Send_Message {
+import io.protostuff.Tag;
 
+import java.io.Serializable;
+
+public class Send_Message implements Serializable {
+
+    //定义字段顺序
+    @Tag(1)
     private String userId;
 
+    @Tag(2)
     private String phone;
 
     public String getUserId() {
@@ -19,6 +26,11 @@ public class Send_Message {
     }
 
     public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Send_Message(String userId, String phone) {
+        this.userId = userId;
         this.phone = phone;
     }
 

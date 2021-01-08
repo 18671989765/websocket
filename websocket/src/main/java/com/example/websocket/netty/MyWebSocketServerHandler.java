@@ -1,5 +1,6 @@
 package com.example.websocket.netty;
 
+import com.example.websocket.entity.Send_Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -11,6 +12,10 @@ import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 
 
 import java.util.Date;
@@ -23,8 +28,7 @@ public class MyWebSocketServerHandler extends SimpleChannelInboundHandler<Object
 
     private String channelName = "channel";
 
-//    @Autowired
-//    private RedisTemplate<String,ChannelGroup> redisTemplate;
+
 
     private static final Logger logger = Logger.getLogger(WebSocketServerHandshaker.class.getName());
 
@@ -38,7 +42,7 @@ public class MyWebSocketServerHandler extends SimpleChannelInboundHandler<Object
         // 建立链接之后维护channel
         ChannelGroup group = Global.group;
         group.add(ctx.channel());
-//        redisTemplate.opsForValue().set(channelName,group);
+
         System.out.println("客户端与服务端连接开启：" + ctx.channel().remoteAddress().toString());
     }
 
@@ -48,8 +52,7 @@ public class MyWebSocketServerHandler extends SimpleChannelInboundHandler<Object
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         // 移除
-//        ChannelGroup channels = redisTemplate.opsForValue().get(channelName);
-//        channels.remove(ctx.channel());
+
         Global.group.remove(ctx.channel());
         System.out.println("客户端与服务端连接关闭：" + ctx.channel().remoteAddress().toString());
     }
@@ -64,7 +67,7 @@ public class MyWebSocketServerHandler extends SimpleChannelInboundHandler<Object
             handleHttpRequest(ctx, ((FullHttpRequest) msg));
        // WebSocket接入
         } else if (msg instanceof WebSocketFrame) {
-//            System.out.println(handshaker.uri());
+
             if ("anzhuo".equals(ctx.attr(AttributeKey.valueOf("type")).get())) {
                 handlerWebSocketFrame(ctx, (WebSocketFrame) msg);
             } else {
@@ -105,6 +108,17 @@ public class MyWebSocketServerHandler extends SimpleChannelInboundHandler<Object
         if (logger.isLoggable(Level.FINE)) {
             logger.fine(String.format("%s received %s", ctx.channel(), request));
         }
+
+        //使用protobuf 编解码
+        Send_Message p = new Send_Message("mushan","18671989765");
+        LinkedBuffer buffer = LinkedBuffer.allocate();
+        Schema<Send_Message> schema = RuntimeSchema.getSchema(Send_Message.class);
+        byte[] protobuf = ProtobufIOUtil.toByteArray(p, schema, buffer);
+        Send_Message person = schema.newMessage();
+        ProtobufIOUtil.mergeFrom(protobuf,person,schema);
+        System.out.println(person);
+
+
         TextWebSocketFrame tws = new TextWebSocketFrame(new Date().toString() + ctx.channel().id() + "：" + request);
         // 群发
 //        Global.group.writeAndFlush(tws);
