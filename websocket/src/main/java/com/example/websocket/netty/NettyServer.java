@@ -14,15 +14,15 @@ public class NettyServer {
 
 
     @PostConstruct
-    public void initNetty(){
-        new Thread(){
+    public void initNetty() {
+        new Thread() {
             public void run() {
                 new NettyServer().run();
             }
         }.start();
     }
 
-    public void run(){
+    public void run() {
         System.out.println("===========================Netty端口启动========");
         // Boss线程：由这个线程池提供的线程是boss种类的，用于创建、连接、绑定socket， （有点像门卫）然后把这些socket传给worker线程池。
         // 在服务器端每个监听的socket都有一个boss线程来处理。在客户端，只有一个boss线程来处理所有的socket。
@@ -42,7 +42,7 @@ public class NettyServer {
             ch.closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             bossGroup.shutdownGracefully();
             workGroup.shutdownGracefully();
         }

@@ -13,7 +13,7 @@
         window.WebSocket = window.MozWebSocket;
     }
     if (window.WebSocket) {
-        socket = new WebSocket("ws://47.99.154.243:8081/websocket");
+        socket = new WebSocket("ws://localhost:8081/websocket");
         socket.onmessage = function (event) {
             var ta = document.getElementById('responseText');
             ta.value = "";
@@ -28,8 +28,7 @@
             ta.value = "";
             ta.value = "WebSocket 关闭!";
         };
-    }
-    else {
+    } else {
         alert("抱歉，您的浏览器不支持WebSocket协议!");
     }
 
@@ -39,8 +38,7 @@
         }
         if (socket.readyState == WebSocket.OPEN) {
             socket.send(message);
-        }
-        else {
+        } else {
             alert("WebSocket连接没有建立成功!");
         }
     }

@@ -37,13 +37,12 @@ public class SendController {
 //    }
 
 
-
     @GetMapping("/sendOne/{msg}")
-    public void sendOne(@PathVariable String msg){
-        TextWebSocketFrame tws = new TextWebSocketFrame(new Date().toString()  + "：" + msg);
+    public void sendOne(@PathVariable String msg) {
+        TextWebSocketFrame tws = new TextWebSocketFrame(new Date().toString() + "：" + msg);
 
         //这里进行发送数据 从netty中获取到channel 然后发送数据
-            Global.group.writeAndFlush(tws);
+        Global.group.writeAndFlush(tws);
 
     }
 
