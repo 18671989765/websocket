@@ -9,14 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class IndexController {
 
 
-
     @GetMapping("/index/{msg}")
-    public String index(@PathVariable String msg)
-    {
+    public String index(@PathVariable String msg) {
         return "index";
     }
-
-
 
 
 }
