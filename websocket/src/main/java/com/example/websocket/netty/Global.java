@@ -6,5 +6,9 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 public class Global {
 
+    /**
+     * 测试
+     */
+
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 }
