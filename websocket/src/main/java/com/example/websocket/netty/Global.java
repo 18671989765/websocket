@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 public class Global {
 
     /**
-     * 测试是得
+     * 测试
      */
 
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
